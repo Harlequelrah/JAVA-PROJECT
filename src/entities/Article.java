@@ -12,12 +12,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 public class Article {
-    final private int id_art;
-    final private int id_cat;
+    private int id_art;
+    private int id_cat;
     private String libelle;
     private double prix;
     private int quantiteEnStock;
-    final private String  dateCreation;
+    private String  dateCreation;
     private int quantiteSeuil;
     private Categorie categorie;
     
@@ -36,11 +36,11 @@ public class Article {
     }
 
     // Getters et Setters
-    public int getId_art() {
+    public int getId_Art() {
         return id_art;
     }
 
-    public int getId_cat() {
+    public int getId_Cat() {
         return id_cat;
     }
 
@@ -55,6 +55,18 @@ public class Article {
 
     public double getPrix() {
         return prix;
+    }
+
+    public void setId_Art(int id_art) {
+        this.id_art = id_art;
+    }
+
+    public void setId_Cat(int id_cat) {
+        this.id_cat = id_cat;
+    }
+
+    public void setDateCreation(String dateCreation) {
+        this.dateCreation = dateCreation;
     }
 
     public void setPrix(double prix) {

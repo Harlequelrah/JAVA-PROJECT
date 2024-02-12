@@ -90,6 +90,95 @@ public class ArticleDao {
         return resultat;
         
     }
+     public static int deleteArticle(Article article) throws SQLException{
+        int retour =0;
+        Connection con = DatabaseConnection.connect();
+
+        String deleteArticle = "DELETE FROM article where id = ?";
+
+        PreparedStatement ps = null;
+        ps = con.prepareStatement(deleteArticle);
+
+        ps.setInt(1, article.getId_Art());
+
+        retour = ps.executeUpdate();
+
+        return retour;
+    }
+    public static int updateArticle(int id) throws SQLException{
+        int retour = 0;
+        Connection con = DatabaseConnection.connect();
+
+        String updateArticle = "UPDATE article SET id_cat = ?, libelle = ?, prix = ?, qteEnStock=?, dateCreation=?, qteSeuil=? WHERE id= ?";
+         PreparedStatement ps = null;
+
+         ps = con.prepareStatement(updateArticle);
+
+         ps.setInt(1, id);
+
+        retour = ps.executeUpdate();
+        return retour;
+    }
+    public static int findArticle(int id) throws SQLException{
+        int retour =0;
+        Connection con =DatabaseConnection.connect();
+        String findArticle = "SELECT * FROM article where id=?";
+        PreparedStatement ps = null;
+        ps = con.prepareStatement(findArticle);
+        ps.setInt(1, id);
+        retour = ps.executeUpdate();
+        return retour;
+    }
+    public static List<ArticleCat> ArticleList() throws SQLException{
+        List<ArticleCat> articles = new ArrayList<>();
+        int retour = 0;
+        Connection con = DatabaseConnection.connect();
+        String articleList = "SELECT a.id, libelle, id_cat, designation, prix, dateCreation, qteEnStock, qteSeuil FROM article a INNER JOIN categorie c ON a.id_cat = c.id ";
+        PreparedStatement ps = null;
+        ps = con.prepareStatement(articleList);
+        ResultSet rs = null;
+        rs = ps.executeQuery();
+        while(rs.next()){
+            ArticleCat article = new ArticleCat();
+            article.setId_Art(rs.getInt("a.id"));
+            article.setLibelle(rs.getString("libelle"));
+            article.setId_Cat(rs.getInt("id_cat"));
+            article.setDesignation(rs.getString("designation"));
+            article.setPrix(rs.getDouble("prix"));
+            article.setDateCreation(rs.getString("dateCreation"));
+            article.setQuantiteEnStock(rs.getInt("qteEnStock"));
+            article.setQuantiteSeuil(rs.getInt("qteSeuil"));
+
+            articles.add(article);
+    }
+        return articles;
+    }
+
+    public static class ArticleCat extends Article {
+        private String designation;
+
+        public ArticleCat() {
+        }
+
+        public ArticleCat(String designation) {
+            this.designation = designation;
+        }
+
+        public ArticleCat( int id_art, String libelle, int id_cat, String designation, double prix,String dateCreation, int quantiteEnStock,  int quantiteSeuil) {
+            super(id_art, id_cat, libelle, prix,quantiteSeuil);
+            this.designation = designation;
+        }
+
+        public String getDesignation() {
+            return designation;
+        }
+
+        public void setDesignation(String designation) {
+            this.designation = designation;
+        }
+
+
+    }
    
 
     

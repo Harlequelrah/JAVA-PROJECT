@@ -9,7 +9,7 @@ package entities;
  * @author Maxime
  */
 public class Categorie {
-    final private int id_cat;
+     private int id_cat;
     private String designation;
     
     public Categorie(){

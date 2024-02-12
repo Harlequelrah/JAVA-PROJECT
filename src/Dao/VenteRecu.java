@@ -19,15 +19,16 @@ import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VenteRecuCreation {
-   
-    public static boolean Vendre(Article article,int qtevendu,String date_vente)throws SQLException{
+public class VenteRecu {
+    
+    public static boolean Vendre(Article article,int qtevendu)throws SQLException{
        boolean retour = false;
-       date_vente=Article.getDateFormatted();
+        String date_vente=Article.getDateFormatted();
         Connection con =DatabaseConnection.connect();
-        PreparedStatement ps = con.prepareStatement("insert into vente(quantite_vendue,id_art) values (?,?)");
+        PreparedStatement ps = con.prepareStatement("insert into vente(quantite_vendue,date_vente,id_art) values (?,?,?)");
         ps.setInt(1, qtevendu);
-        ps.setInt(2, article.getId_Art());
+        ps.setString(2,date_vente);
+        ps.setInt(3, article.getId_Art());
         ps.executeUpdate();
         ResultSet rs =ps.getResultSet();
         int id_vente=rs.getInt("id_vente");
@@ -37,8 +38,14 @@ public class VenteRecuCreation {
         ps2.setString(3,date_vente);
         ps2.setInt(4, id_vente);
         ps2.executeUpdate();
+        PreparedStatement ps3=con.prepareStatement("Update article set quantite_en_stock=? where id_art=? ");
+        ps3.setInt(1,article.getQuantiteEnStock()- qtevendu);
+        ps3.setInt(2,article.getId_Art());
+        ps3.executeUpdate();
         rs.close();
         ps.close();
+        ps2.close();
+        ps3.close();
         con.close();
         retour=true;
         return retour;
